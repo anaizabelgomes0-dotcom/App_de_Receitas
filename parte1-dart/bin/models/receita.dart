@@ -1,4 +1,3 @@
-
 class Receita {
 
   final String nome;
@@ -6,9 +5,6 @@ class Receita {
   final double custoAproximado;
   final DateTime dataCriacao;
   final String modoPreparo;
-
-
-
 
 Receita({
  required this.nome,
@@ -18,5 +14,9 @@ Receita({
  required this.modoPreparo,
 });
 
-}
+  String ficha() {
+    return '$nome | $tempoPreparoMinutos min | '
+        'R\$ ${custoAproximado.toStringAsFixed(2)}';
+  }
 
+}
