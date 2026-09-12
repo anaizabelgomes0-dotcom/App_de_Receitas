@@ -1,5 +1,7 @@
 import 'models/receita.dart';
 import 'models/receitas2.dart';
+import 'models/livro_de_receitas.dart';
+
 void main(){
   print('Projeto parte1-dart funcionando!');
 
@@ -10,6 +12,10 @@ void main(){
     dataCriacao: DateTime.now(),
     modoPreparo: '',
   );
+
+
+  final livro = LivroDeReceitas();
+  livro.adicionar(bolo);
 
   print('[1] RECEITA');
   print(' Nome: ${bolo.nome}');
@@ -39,4 +45,13 @@ void main(){
   print('===== [2] HERANÇA =====');
   print('Receita comum -> ficha: "${receitaComum.ficha()}"');
   print('ReceitaSecreta -> ficha: "${receitaSecreta.ficha()}"');
+
+ print('');
+ print('===== [3] LIVRO DE RECEITAS =====');
+ print('Total de receitas: ${livro.receitas.length}');
+
+for (final receita in livro.receitas) {
+  print('- ${receita.nome}');
+}
+
 }
