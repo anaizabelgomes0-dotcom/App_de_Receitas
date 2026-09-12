@@ -54,4 +54,20 @@ for (final receita in livro.receitas) {
   print('- ${receita.nome}');
 }
 
+  print('');
+  print('===== [4] ENCAPSULAMENTO =====');
+  print('Tempo total de preparo (antes): ${livro.tempoTotalPreparoMinutos} min');
+
+  final receitaExtra = Receita(
+    nome: 'Torta de Limão',
+    tempoPreparoMinutos: 35,
+    custoAproximado: 18.0,
+    dataCriacao: DateTime.now(),
+    modoPreparo: 'Monte a torta e leve à geladeira por 2 horas.',
+  );
+  livro.adicionar(receitaExtra);
+
+  print('Tempo total de preparo (depois de adicionar "${receitaExtra.nome}"): '
+      '${livro.tempoTotalPreparoMinutos} min');
+
 }
