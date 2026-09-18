@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'models/receita.dart';
 import 'models/livro_de_receitas.dart';
 import 'widgets/receita_card.dart';
+import 'screens/cadastro_receita.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,10 +33,23 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
-  LivroDeReceitas criarLivro() {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late final LivroDeReceitas _livro;
+
+  @override
+  void initState() {
+    super.initState();
+    _livro = _criarLivro();
+  }
+
+  LivroDeReceitas _criarLivro() {
     final livro = LivroDeReceitas();
 
     final receitas = [
@@ -90,10 +104,25 @@ class HomePage extends StatelessWidget {
     return livro;
   }
 
+  Future<void> _abrirCadastro() async {
+    final novaReceita = await Navigator.of(context).push<Receita>(
+      MaterialPageRoute(
+        builder: (context) => const CadastroReceita(),
+      ),
+    );
+
+    if (novaReceita != null) {
+      setState(() {
+        // Chama o método do exercício 3/4 (LivroDeReceitas.adicionar)
+        // dentro do setState — é isso que avisa o Flutter para
+        // reconstruir a tela com a lista e o total atualizados.
+        _livro.adicionar(novaReceita);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final livro = criarLivro();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -109,6 +138,11 @@ class HomePage extends StatelessWidget {
             icon: const Icon(Icons.favorite_border),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _abrirCadastro,
+        icon: const Icon(Icons.add),
+        label: const Text('Nova receita'),
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
@@ -132,20 +166,33 @@ class HomePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            const Text(
-              'Lista de receitas',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF2D6A4F),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Lista de receitas',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF2D6A4F),
+                  ),
+                ),
+                Text(
+                  'Total: ${_livro.tempoTotalPreparoMinutos} min',
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFFD9534F),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 12),
             Expanded(
               child: ListView.builder(
-                itemCount: livro.receitas.length,
+                itemCount: _livro.receitas.length,
                 itemBuilder: (context, index) {
-                  final receita = livro.receitas[index];
+                  final receita = _livro.receitas[index];
 
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 14),
